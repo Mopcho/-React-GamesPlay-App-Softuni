@@ -1,4 +1,4 @@
-export const catalogue = () => {
+export const Catalogue = () => {
 	return (
 		// <!-- Catalogue -->
 		<section id="catalog-page">

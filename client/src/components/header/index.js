@@ -1,23 +1,25 @@
+import { NavLink } from 'react-router-dom';
+
 export const Header = () => {
 	return (
 		<header>
 			{/* <!-- Navigation --> */}
 			<h1>
-				<a className="home" href="#">
+				<NavLink to="/" className="home">
 					GamesPlay
-				</a>
+				</NavLink>
 			</h1>
 			<nav>
-				<a href="#">All games</a>
+				<NavLink to="/catalogue">All games</NavLink>
 				{/* <!-- Logged-in users --> */}
 				<div id="user">
-					<a href="#">Create Game</a>
+					<NavLink to="/create">Create Game</NavLink>
 					<a href="#">Logout</a>
 				</div>
 				{/* <!-- Guest users --> */}
 				<div id="guest">
-					<a href="#">Login</a>
-					<a href="#">Register</a>
+					<NavLink to="/login">Login</NavLink>
+					<NavLink to="/register">Register</NavLink>
 				</div>
 			</nav>
 		</header>
