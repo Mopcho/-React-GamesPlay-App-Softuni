@@ -1,6 +1,16 @@
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { clearAccessToken } from 'utils/userToken';
 
 export const Header = () => {
+	const navigate = useNavigate();
+
+	async function onLogout(ev) {
+		ev.preventDefault();
+
+		await clearAccessToken();
+
+		navigate('/');
+	}
 	return (
 		<header>
 			{/* <!-- Navigation --> */}
@@ -14,7 +24,9 @@ export const Header = () => {
 				{/* <!-- Logged-in users --> */}
 				<div id="user">
 					<NavLink to="/create">Create Game</NavLink>
-					<a href="#">Logout</a>
+					<a href="" onClick={onLogout}>
+						Logout
+					</a>
 				</div>
 				{/* <!-- Guest users --> */}
 				<div id="guest">

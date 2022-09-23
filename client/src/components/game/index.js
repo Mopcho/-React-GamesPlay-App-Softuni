@@ -1,21 +1,15 @@
-export const Game = () => {
+import { NavLink } from 'react-router-dom';
+
+export const Game = ({ title, category, imageUrl, _id }) => {
 	return (
-		<div className="game">
-			<div className="image-wrap">
-				<img src="./images/CoverFire.png" />
-			</div>
-			<h3>Cover Fire</h3>
-			<div className="rating">
-				<span>☆</span>
-				<span>☆</span>
-				<span>☆</span>
-				<span>☆</span>
-				<span>☆</span>
-			</div>
-			<div className="data-buttons">
-				<a href="#" className="btn details-btn">
+		<div className="allGames">
+			<div className="allGames-info">
+				<img src={imageUrl} />
+				<h6>{category}</h6>
+				<h2>{title}</h2>
+				<NavLink to={`/games/${_id}`} className="details-button">
 					Details
-				</a>
+				</NavLink>
 			</div>
 		</div>
 	);

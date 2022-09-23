@@ -1,42 +1,25 @@
+import { Game } from 'components/game';
+import { useEffect, useState } from 'react';
+import { listGames } from 'services/api/games';
+
 export const Catalogue = () => {
+	const [games, setGames] = useState([]);
+
+	useEffect(() => {
+		listGames().then((games) => setGames(games));
+	}, []);
+
 	return (
 		// <!-- Catalogue -->
 		<section id="catalog-page">
 			<h1>All Games</h1>
 			{/* <!-- Display div: with information about every game (if any) --> */}
-			<div class="allGames">
-				<div class="allGames-info">
-					<img src="./images/avatar-1.jpg" />
-					<h6>Action</h6>
-					<h2>Cover Fire</h2>
-					<a href="#" class="details-button">
-						Details
-					</a>
-				</div>
-			</div>
-			<div class="allGames">
-				<div class="allGames-info">
-					<img src="./images/avatar-1.jpg" />
-					<h6>Action</h6>
-					<h2>Zombie lang</h2>
-					<a href="#" class="details-button">
-						Details
-					</a>
-				</div>
-			</div>
-			<div class="allGames">
-				<div class="allGames-info">
-					<img src="./images/avatar-1.jpg" />
-					<h6>Action</h6>
-					<h2>MineCraft</h2>
-					<a href="#" class="details-button">
-						Details
-					</a>
-				</div>
-			</div>
-
 			{/* <!-- Display paragraph: If there is no games  -->s */}
-			<h3 class="no-articles">No articles yet</h3>
+			{games ? (
+				games.map((game) => <Game key={game._id} {...game}></Game>)
+			) : (
+				<h3 className="no-articles">No articles yet</h3>
+			)}
 		</section>
 	);
 };

@@ -1,5 +1,7 @@
 import { Catalogue } from 'components/catalogue';
 import { Create } from 'components/create';
+import { Details } from 'components/details';
+import { Edit } from 'components/edit';
 import { Header } from 'components/header';
 import { Home } from 'components/home';
 import { Login } from 'components/login';
@@ -18,7 +20,9 @@ function App() {
 						<Route path="/login" element={<Login />} />
 						<Route path="/register" element={<Register />} />
 						<Route path="/create" element={<Create />} />
+						<Route path="/edit/:id" element={<Edit />} />
 						<Route path="/catalogue" element={<Catalogue />} />
+						<Route path="/games/:id" element={<Details />} />
 						<Route
 							path="*"
 							element={

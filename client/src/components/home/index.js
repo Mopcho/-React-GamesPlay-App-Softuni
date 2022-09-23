@@ -1,4 +1,5 @@
 import { Game } from 'components/game';
+import { LatestGame } from 'components/latestGame';
 
 export const Home = () => {
 	return (
@@ -14,9 +15,9 @@ export const Home = () => {
 				<h1>Latest Games</h1>
 
 				{/* <!-- Display div: with information about every game (if any) --> */}
-				<Game></Game>
-				<Game></Game>
-				<Game></Game>
+				<LatestGame></LatestGame>
+				<LatestGame></LatestGame>
+				<LatestGame></LatestGame>
 
 				{/* <!-- Display paragraph: If there is no games  --> */}
 				{/* <p className="no-articles">No games yet</p> */}
