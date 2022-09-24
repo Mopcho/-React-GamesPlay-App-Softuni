@@ -37,3 +37,21 @@ export async function loginUser(data) {
 
 	return response;
 }
+
+export async function getUser(token) {
+	const responseRaw = await fetch(`${root}/me`, {
+		method: 'GET',
+		headers: {
+			'Content-Type': 'application/json',
+			'X-Authorization': token,
+		},
+	});
+
+	const response = await responseRaw.json();
+
+	if (response.code === 403) {
+		return response;
+	}
+
+	return response;
+}

@@ -1,4 +1,5 @@
 const root = 'http://localhost:3030/data/games';
+const commentsRoot = 'http://localhost:3030/data/comments';
 
 export async function listGames() {
 	const gamesRaw = await fetch(`${root}?sortBy=_createdOn%20desc`, {
@@ -57,6 +58,47 @@ export async function editGame(id, token, data) {
 			'X-Authorization': token,
 		},
 	});
+
+	const response = await responseRaw.json();
+
+	return response;
+}
+
+export async function getComments(id) {
+	const responseRaw = await fetch(
+		`${commentsRoot}/?where=gameId%3D%22${id}%22`,
+		{
+			method: 'GET',
+		}
+	);
+
+	const response = await responseRaw.json();
+
+	return response;
+}
+
+export async function postComment(token, data) {
+	const responseRaw = await fetch(`${commentsRoot}`, {
+		method: 'POST',
+		body: JSON.stringify(data),
+		headers: {
+			'Content-Type': 'application/json',
+			'X-Authorization': token,
+		},
+	});
+
+	const response = await responseRaw.json();
+
+	return response;
+}
+
+export async function getLatestGames() {
+	const responseRaw = await fetch(
+		`${root}?sortBy=_createdOn%20desc&distinct=category`,
+		{
+			method: 'GET',
+		}
+	);
 
 	const response = await responseRaw.json();
 

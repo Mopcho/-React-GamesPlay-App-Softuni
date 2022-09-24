@@ -1,7 +1,10 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { createGame } from 'services/api/games';
 
 export const Create = () => {
+	const navigate = useNavigate();
+
 	const [gameData, setGameData] = useState({
 		title: '',
 		category: '',
@@ -12,8 +15,16 @@ export const Create = () => {
 
 	async function onCreate(ev) {
 		ev.preventDefault();
+
 		const token = sessionStorage.getItem('accessToken');
-		await createGame(gameData, token);
+
+		const response = await createGame(gameData, token);
+
+		if (response.code === 403) {
+			return window.alert(response.message);
+		}
+
+		navigate(`/games/${response._id}`);
 	}
 
 	async function onChangeInput(ev) {

@@ -1,15 +1,43 @@
 import { useEffect, useState } from 'react';
 import { NavLink, useNavigate, useParams } from 'react-router-dom';
-import { deleteGame, getGame } from 'services/api/games';
+import {
+	deleteGame,
+	getComments,
+	getGame,
+	postComment,
+} from 'services/api/games';
+import { getUser } from 'services/api/users';
 import { getAccessToken } from 'utils/userToken';
 
 export const Details = () => {
 	const navigate = useNavigate();
 	let { id } = useParams();
-	const [game, setGame] = useState({});
+	let [game, setGame] = useState({});
+	let [comments, setComments] = useState([]);
+	let [formComment, setFormComment] = useState('');
+	let [user, setUser] = useState({});
 
+	/**
+	 * 1. Sets game
+	 * 2. Sets comments
+	 * 3. Tries to set user if any
+	 */
 	useEffect(() => {
-		getGame(id).then((game) => setGame(game));
+		async function func() {
+			const game = await getGame(id);
+			setGame(game);
+
+			const comments = await getComments(id);
+			setComments(comments);
+
+			const token = await getAccessToken();
+			if (token) {
+				const user = await getUser(token);
+				setUser(user);
+			}
+		}
+
+		func();
 	}, [id]);
 
 	async function onDelete(ev) {
@@ -24,6 +52,26 @@ export const Details = () => {
 		}
 	}
 
+	async function onComment(ev) {
+		ev.preventDefault();
+
+		const token = await getAccessToken();
+		const data = {
+			comment: formComment,
+			gameId: id,
+		};
+
+		const response = await postComment(token, data);
+		setComments((comments) => [...comments, response]);
+	}
+
+	function onChange(ev) {
+		const value = ev.target.value;
+
+		setFormComment(value);
+	}
+
+	console.log(user);
 	return (
 		// <!--Details Page-->
 		<section id="game-details">
@@ -42,51 +90,59 @@ export const Details = () => {
 				<div className="details-comments">
 					<h2>Comments:</h2>
 					<ul>
+						{comments.length > 0 ? (
+							comments.map((comment) => (
+								<li key={comment._id} className="comment">
+									<p>{comment.comment}</p>
+								</li>
+							))
+						) : (
+							<p className="no-comment">No comments.</p>
+						)}
 						{/* <!-- list all comments for current game (If any) --> */}
-						<li className="comment">
-							<p>Content: I rate this one quite highly.</p>
-						</li>
-						<li className="comment">
-							<p>Content: The best game.</p>
-						</li>
 					</ul>
 					{/* <!-- Display paragraph: If there are no games in the database --> */}
-					<p className="no-comment">No comments.</p>
 				</div>
 
 				{/* <!-- Edit/Delete buttons ( Only for creator of this game )  --> */}
-				<div className="buttons">
-					<NavLink
-						to={{
-							pathname: `/edit/${game._id}`,
-							state: { ...game },
-						}}
-						className="button"
-					>
-						Edit
-					</NavLink>
-					<a className="button" onClick={onDelete}>
-						Delete
-					</a>
-				</div>
+				{user._id === game._ownerId ? (
+					<div className="buttons">
+						<NavLink
+							to={{
+								pathname: `/edit/${game._id}`,
+								state: { ...game },
+							}}
+							className="button"
+						>
+							Edit
+						</NavLink>
+						<a className="button" onClick={onDelete}>
+							Delete
+						</a>
+					</div>
+				) : null}
 			</div>
 
 			{/* <!-- Bonus --> */}
 			{/* <!-- Add Comment ( Only for logged-in users, which is not creators of the current game ) --> */}
-			<article className="create-comment">
-				<label>Add new comment:</label>
-				<form className="form">
-					<textarea
-						name="comment"
-						placeholder="Comment......"
-					></textarea>
-					<input
-						className="btn submit"
-						type="submit"
-						value="Add Comment"
-					/>
-				</form>
-			</article>
+			{user._id !== game._ownerId && Object.keys(user).length !== 0 ? (
+				<article className="create-comment">
+					<label>Add new comment:</label>
+					<form className="form" onSubmit={onComment}>
+						<textarea
+							name="comment"
+							placeholder="Comment......"
+							onChange={onChange}
+							value={formComment}
+						></textarea>
+						<input
+							className="btn submit"
+							type="submit"
+							value="Add Comment"
+						/>
+					</form>
+				</article>
+			) : null}
 		</section>
 	);
 };

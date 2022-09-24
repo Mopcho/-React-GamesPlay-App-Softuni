@@ -1,7 +1,17 @@
 import { Game } from 'components/game';
 import { LatestGame } from 'components/latestGame';
+import { useEffect, useState } from 'react';
+import { getLatestGames } from 'services/api/games';
 
 export const Home = () => {
+	let [latestGames, setLatestGames] = useState([]);
+
+	useEffect(() => {
+		getLatestGames().then((games) =>
+			setLatestGames((latestGames) => games)
+		);
+	});
+
 	return (
 		// <!--Home Page-->
 		<section id="welcome-world">
@@ -15,9 +25,9 @@ export const Home = () => {
 				<h1>Latest Games</h1>
 
 				{/* <!-- Display div: with information about every game (if any) --> */}
-				<LatestGame></LatestGame>
-				<LatestGame></LatestGame>
-				<LatestGame></LatestGame>
+				{latestGames.map((game) => (
+					<LatestGame {...game}></LatestGame>
+				))}
 
 				{/* <!-- Display paragraph: If there is no games  --> */}
 				{/* <p className="no-articles">No games yet</p> */}
