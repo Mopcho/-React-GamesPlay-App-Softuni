@@ -1,7 +1,9 @@
+import { useEffect, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { clearAccessToken } from 'utils/userToken';
+import { getUser } from 'services/api/users';
+import { clearAccessToken, getAccessToken } from 'utils/userToken';
 
-export const Header = () => {
+export const Header = ({ user, setUser }) => {
 	const navigate = useNavigate();
 
 	async function onLogout(ev) {
@@ -9,8 +11,11 @@ export const Header = () => {
 
 		await clearAccessToken();
 
+		setUser({});
+
 		navigate('/');
 	}
+
 	return (
 		<header>
 			{/* <!-- Navigation --> */}
@@ -22,17 +27,21 @@ export const Header = () => {
 			<nav>
 				<NavLink to="/catalogue">All games</NavLink>
 				{/* <!-- Logged-in users --> */}
-				<div id="user">
-					<NavLink to="/create">Create Game</NavLink>
-					<a href="" onClick={onLogout}>
-						Logout
-					</a>
-				</div>
+				{Object.keys(user).length !== 0 ? (
+					<div id="user">
+						<NavLink to="/create">Create Game</NavLink>
+						<a href="" onClick={onLogout}>
+							Logout
+						</a>
+					</div>
+				) : (
+					<div id="guest">
+						<NavLink to="/login">Login</NavLink>
+						<NavLink to="/register">Register</NavLink>
+					</div>
+				)}
+
 				{/* <!-- Guest users --> */}
-				<div id="guest">
-					<NavLink to="/login">Login</NavLink>
-					<NavLink to="/register">Register</NavLink>
-				</div>
 			</nav>
 		</header>
 	);

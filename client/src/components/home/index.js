@@ -10,7 +10,7 @@ export const Home = () => {
 		getLatestGames().then((games) =>
 			setLatestGames((latestGames) => games)
 		);
-	});
+	}, []);
 
 	return (
 		// <!--Home Page-->

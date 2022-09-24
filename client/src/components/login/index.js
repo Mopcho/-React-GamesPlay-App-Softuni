@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { loginUser } from 'services/api/users';
 
-export const Login = () => {
+export const Login = ({ user, setUser }) => {
 	const navigate = useNavigate();
 
 	const [formData, setFormData] = useState({
@@ -33,6 +33,8 @@ export const Login = () => {
 		if (response.code === 403) {
 			return window.alert(response.message);
 		}
+
+		setUser(response);
 
 		navigate('/');
 	}

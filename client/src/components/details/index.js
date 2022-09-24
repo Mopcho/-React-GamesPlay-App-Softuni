@@ -9,13 +9,12 @@ import {
 import { getUser } from 'services/api/users';
 import { getAccessToken } from 'utils/userToken';
 
-export const Details = () => {
+export const Details = ({ user, setUser }) => {
 	const navigate = useNavigate();
 	let { id } = useParams();
 	let [game, setGame] = useState({});
 	let [comments, setComments] = useState([]);
 	let [formComment, setFormComment] = useState('');
-	let [user, setUser] = useState({});
 
 	/**
 	 * 1. Sets game

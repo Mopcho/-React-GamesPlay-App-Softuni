@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { registerUser } from 'services/api/users';
 
-export const Register = () => {
+export const Register = ({ user, setUser }) => {
 	const navigate = useNavigate();
 	const [formData, setFormData] = useState({
 		email: '',
@@ -46,6 +46,12 @@ export const Register = () => {
 			email: formData.email,
 			password: formData.password,
 		});
+
+		if (response.code >= 400) {
+			return window.alert(response.message);
+		}
+
+		setUser(response);
 
 		navigate('/');
 	}
